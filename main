@@ -1,0 +1,75 @@
+[1:38 a. m., 28/10/2023] Miawlex ❤️✨: import tkinter as tk
+import re
+from demo2 import *
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+def ConfigurarFrames():
+    ventana.grid_rowconfigure(0, weight=2)
+    ventana.grid_rowconfigure(1, weight=3)
+    ventana.grid_columnconfigure(0, weight=2)
+    ventana.grid_columnconfigure(1, weight=3)
+
+
+def FindWord(texto, clave):
+    contenido = texto.get("1.0", "end")
+    patron = r'\b{}\b'.format(clave)
+    coincidencias = [match.span()
+                     for match in re.finditer(patron, contenido, re.IGNORECASE)]
+    for start, end in coincidencias:
+        texto.tag_add("rojo", f"1.{start}", f"1.{end}")
+    texto.tag_configure("rojo", foreground="red")
+
+
+def ChekList(texto):
+    Claves = ["arma", "disparo", "bala", "pistola", "accidente", "…
+[1:38 a. m., 28/10/2023] Miawlex ❤️✨: #!/usr/bin/env python3
+
+# NOTE: this example requires PyAudio because it uses the Microphone class
+import io
+import speech_recognition as sr
+from google.oauth2 import service_account
+from google.cloud import speech
+
+# obtain audio from the microphone
+
+
+def grabarAudio(t):
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Say something!")
+        audio = r.listen(source, timeout=t, phrase_time_limit=t)
+
+    GOOGLE_CLOUD_SPEECH_CREDENTIALS = 'saSpeechDemo.json'
+    try:
+        transcript = r.recognize_google_cloud(
+            audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS, language="es-MX")
+        print(transcript)
+        return transcript
+    except sr.UnknownValueError:
+        print("Google Cloud Speech could not understand audio")
+    except sr.RequestError as e:
+        print(
+            "Could not request results from Google Cloud Speech service; {0}".format(e))
+    return "lol"
+
+
+def transcriptionFromAudio(audio_file):
+    client_file = 'saSpeechDemo.json'
+    credentials = service_account.Credentials.from_service_account_file(
+        client_file)
+    client = speech.SpeechClient(credentials=credentials)
+
+    # load the audio file
+    with io.open(audio_file, 'rb') as f:
+        content = f.read()
+        audio = speech.RecognitionAudio(content=content)
+
+    config = speech.RecognitionConfig(
+        language_code='es-MX'
+    )
+
+    response = client.recognize(config=config, audio=audio)
+
+    return response.results[0].alternatives[0].transcript
